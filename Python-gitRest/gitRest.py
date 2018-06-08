@@ -21,8 +21,8 @@ app.config.from_envvar('YOURAPPLICATION_SETTINGS')
 
 
 # Ruta al repositorio
-#repo = Repo('C:/Users/anonimous/Documents/branch/Acsel-e')
-#repo = Repo('C:/Users/anonimous/Documents/Proyectos/IDEOS')
+# repo = Repo('C:/Users/anonimous/Documents/branch/Acsel-e')
+# repo = Repo('C:/Users/anonimous/Documents/Proyectos/IDEOS')
 repo = Repo('C:/Users/rmoreno/Documents/ROGER/projects/git/easySoft-ApiRest')
 logging.getLogger().setLevel(logging.INFO)
 
@@ -157,8 +157,14 @@ def get_commit_files():
             modified_file['modificationType'] = change_type
             # Cambios realizados en el archivo
             file_commits = list(repo.iter_commits(paths=file_path))
-            diffs = repo.git.diff(file_commits[len(file_commits) - 1], sha,
-                                  file_path)
+            # diffs = str(diff.diff.decode('utf-8'))
+            try:
+                diffs = repo.git.diff(file_commits[len(file_commits) - 1], sha,
+                                      file_path)
+            except Exception:
+                diffs = repo.git.diff(file_commits[len(file_commits) - 1], sha,
+                                      file_path.split('/')[1:])
+
             modified_file['fileDiffs'] = diffs
 
             mod_files_diff.append(modified_file)
